@@ -1,0 +1,98 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model MuscleGroup {
+  id       Int        @id @default(autoincrement())
+  label    String
+  Exercise Exercise[]
+}
+
+model Exercise {
+  id            Int           @id @default(autoincrement())
+  name          String
+  rest          Int?
+  sugVolume     String        @map("sug-volume")
+  sugSeries     Int           @default(3) @map("sug-series")
+  muscleGroupId Int
+  executionUnit ExecutionUnit
+
+  muscleGroup MuscleGroup @relation(fields: [muscleGroupId], references: [id])
+
+  WorkoutExercise   WorkoutExercise[]
+  ExerciseExecution ExerciseExecution[]
+  Workout           Workout?            @relation(fields: [workoutId], references: [id])
+  workoutId         Int?
+
+  @@map("exercise")
+}
+
+enum ExecutionUnit {
+  TIME
+  REPETITION
+}
+
+model Workout {
+  id              Int               @id @default(autoincrement())
+  label           String
+  WorkoutExercise WorkoutExercise[]
+  // Routine         Routine[]
+  Exercise        Exercise[]
+
+  @@map("workout")
+}
+
+model WorkoutExercise {
+  id    Int    @id @default(autoincrement())
+  label String
+
+  exerciseId Int
+  workoutId  Int
+
+  workout  Workout  @relation(fields: [workoutId], references: [id])
+  Exercise Exercise @relation(fields: [exerciseId], references: [id])
+
+  @@map("workout-exercises")
+}
+
+model ExerciseExecution {
+  id         Int @id @default(autoincrement())
+  exerciseId Int
+  userId     Int
+  rest       Int @default(90)
+  volume     Int
+  series     Int
+  weight     Int
+
+  user User @relation(fields: [userId], references: [id])
+
+  exercise Exercise @relation(fields: [exerciseId], references: [id])
+
+  @@map("exercise-executions")
+}
+
+model User {
+  id          Int      @id @default(autoincrement())
+  name        String
+  email       String
+  dateOfBirth DateTime
+  height      Int
+
+  ExerciseExecution ExerciseExecution[]
+
+  @@map("user")
+}
+
+// model Routine {
+//   workout   Workout @relation(fields: [workoutId], references: [id])
+//   order     Int
+//   workoutId Int
+// }
