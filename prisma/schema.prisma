@@ -17,21 +17,33 @@ model MuscleGroup {
 }
 
 model Routine {
-  id           Int    @id @default(autoincrement())
-  label        String
-  dayOfTheWeek String
-  order        Int?
-  userId       Int
-
-  user User @relation(fields: [userId], references: [id])
+  id              Int      @id @default(autoincrement())
+  label           String
+  startDate       DateTime
+  endDate         DateTime
+  deleteWhenEnded Boolean  @map("delete_when_ended")
 
   RoutineWorkout RoutineWorkout[]
+  UserRoutine    UserRoutine[]
+}
+
+model UserRoutine {
+  userId    Int
+  routineId Int
+
+  user    User    @relation(fields: [userId], references: [id])
+  routine Routine @relation(fields: [routineId], references: [id])
+
+  @@id([userId, routineId])
 }
 
 model RoutineWorkout {
   id        Int @id @default(autoincrement())
   routineId Int
   workoutId Int
+
+  dayOfTheWeek String? @map("day_of_week")
+  order        Int?
 
   routine Routine @relation(fields: [routineId], references: [id])
   workout Workout @relation(fields: [workoutId], references: [id])
@@ -41,24 +53,25 @@ model Workout {
   id    Int    @id @default(autoincrement())
   label String
 
-  WorkoutExercise WorkoutExercise[]
-  RoutineWorkout  RoutineWorkout[]
+  RoutineWorkout           RoutineWorkout[]
+  WorkoutExerciseExecution WorkoutExerciseExecution[]
 
   @@map("workout")
 }
 
-model WorkoutExercise {
-  id    Int    @id @default(autoincrement())
-  label String
+model WorkoutExerciseExecution {
+  id  Int     @id @default(autoincrement())
+  obs String?
 
   exerciseId Int
   workoutId  Int
   userId     Int
-  order      Int // WHAT IS THE SEQUENCE TO FOLLOW
-  rest       Int @default(90)
-  volume     Int
-  series     Int
-  weight     Int
+
+  order  Int // WHAT IS THE SEQUENCE TO FOLLOW
+  rest   Int @default(90)
+  volume Int
+  series Int
+  weight Int
 
   user     User     @relation(fields: [userId], references: [id])
   workout  Workout  @relation(fields: [workoutId], references: [id])
@@ -69,7 +82,7 @@ model WorkoutExercise {
 
 model Exercise {
   id            Int           @id @default(autoincrement())
-  name          String
+  label         String
   rest          Int?
   sugVolume     String        @map("sug-volume")
   sugSeries     Int           @default(3) @map("sug-series")
@@ -78,7 +91,7 @@ model Exercise {
 
   muscleGroup MuscleGroup @relation(fields: [muscleGroupId], references: [id])
 
-  WorkoutExercise WorkoutExercise[]
+  WorkoutExerciseExecution WorkoutExerciseExecution[]
 
   @@map("exercise")
 }
@@ -89,14 +102,15 @@ enum ExecutionUnit {
 }
 
 model User {
-  id              Int               @id @default(autoincrement())
-  name            String
-  email           String
-  dateOfBirth     DateTime
-  height          Int
-  imageUrl        String?
-  WorkoutExercise WorkoutExercise[]
-  Routine         Routine[]
+  id          Int      @id @default(autoincrement())
+  name        String
+  email       String
+  dateOfBirth DateTime
+  height      Int
+  imageUrl    String?
+
+  WorkoutExerciseExecution WorkoutExerciseExecution[]
+  UserRoutine              UserRoutine[]
 
   @@map("user")
 }

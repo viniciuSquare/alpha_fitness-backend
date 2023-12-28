@@ -4,29 +4,35 @@ export async function SeedExercises() {
   const service = new PrismaService();
 
   // CREATE EXERCISES 
-  service.exercise.createMany({
+  const muscleGroup = await service.muscleGroup.findFirst({
+    where: {
+      label: 'Peito'
+    }
+  })
+
+  await service.exercise.createMany({
     data: [
       {
-        name: 'Supino Reto',
+        label: 'Supino Reto',
         executionUnit: "REPETITION",
         sugVolume: "12/10/8",
         sugSeries: 3,
-        muscleGroupId: 1
+        muscleGroupId: muscleGroup.id
       },
-
+      {
+        label: "Supino Inclinado",
+        executionUnit: "REPETITION",
+        sugVolume: "12",
+        sugSeries: 3,
+        muscleGroupId: muscleGroup.id
+      },
+      {
+        label: "Voador",
+        executionUnit: "REPETITION",
+        sugVolume: "12/10/8",
+        sugSeries: 3,
+        muscleGroupId: muscleGroup.id
+      }
     ]
-  })
-
-  // CREATE and popule table WORKOUT
-  await service.muscleGroup.findMany().then(async muscleGroups => {
-    await Promise.all(
-      muscleGroups.map(muscleGroup =>
-        service.workout.create({
-          data: {
-            label: muscleGroup.label
-          }
-        })
-      )
-    ).finally(()=> console.log('Workouts Created by Muscle Group'))
-  })
+  }).finally(()=>console.log('Exercises Created'))
 }

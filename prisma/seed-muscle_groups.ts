@@ -1,9 +1,9 @@
 import { PrismaService } from "../src/services/prisma.service";
 
-export function SeedMuscleGroups() {
+export async function SeedMuscleGroups() {
   const service = new PrismaService();
   
-  service.muscleGroup.createMany({
+  await service.muscleGroup.createMany({
     data: [
       {
         label: 'Peito'

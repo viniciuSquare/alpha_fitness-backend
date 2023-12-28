@@ -1,0 +1,38 @@
+{
+  "routine": {
+    "name": "Jan 2024 - Hiperthophy",
+    "startDate": "01/01/24",
+    "endDate ": "01/03/24",
+    "deleteWhenEnded": "true",
+    "user": {
+      "id": "1",
+      "name": "QuatroLados",
+      "imageUrl": "https://github.com/viniciuSquare.png"
+    },
+    "routineWorkouts": [
+      {
+        "title": "Monday",
+        "dayOfTheWeek": "Monday",
+        "order": "",
+        "workoutExercises": [
+          {
+            "name": "Supino Reto",
+            "muscularGroup": "Peito",
+            "executionUnit": "REPETITIONS",
+            "weight": "30KG",
+            "volume": "12/10/8",
+            "series": "3"
+          },
+          {
+            "name": "Voador",
+            "muscularGroup": "Peito",
+            "executionUnit": "REPETITIONS",
+            "weight": "40KG",
+            "volume": "12/10/8",
+            "series": "3"
+          }
+        ]
+      }
+    ]
+  }
+}
