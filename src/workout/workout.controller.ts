@@ -3,7 +3,7 @@ import { WorkoutService } from './workout.service';
 import { CreateWorkoutDto } from './dto/create-workout.dto';
 import { UpdateWorkoutDto } from './dto/update-workout.dto';
 
-@Controller('workout')
+@Controller('workouts')
 export class WorkoutController {
   constructor(private readonly workoutService: WorkoutService) {}
 

@@ -2,10 +2,11 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { RoutinesService } from './routines.service';
 import { CreateRoutineDto } from './dto/create-routine.dto';
 import { UpdateRoutineDto } from './dto/update-routine.dto';
+import UserRoutineDto from './dto/user-routine.dto';
 
 @Controller('routines')
 export class RoutinesController {
-  constructor(private readonly routinesService: RoutinesService) {}
+  constructor(private readonly routinesService: RoutinesService) { }
 
   @Post()
   create(@Body() createRoutineDto: CreateRoutineDto) {
@@ -20,6 +21,12 @@ export class RoutinesController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.routinesService.findOne(+id);
+  }
+
+  @Post('/set-to-user')
+  setRoutineToUser(@Body() userRoutineDto: UserRoutineDto) {
+    console.log(userRoutineDto)
+    return this.routinesService.setRoutineToUser(userRoutineDto.routineId, userRoutineDto.userId);
   }
 
   @Patch(':id')

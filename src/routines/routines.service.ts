@@ -4,9 +4,11 @@ import { UpdateRoutineDto } from './dto/update-routine.dto';
 import { PrismaService } from 'src/services/prisma.service';
 
 @Injectable()
-export class RoutinesService extends PrismaService{
-  create(createRoutineDto: CreateRoutineDto) {
-    return 'This action adds a new routine';
+export class RoutinesService extends PrismaService {
+  async create(createRoutineDto: CreateRoutineDto) {
+    return await this.routine.create({
+      data: createRoutineDto
+    })
   }
 
   async findAll() {
@@ -31,6 +33,20 @@ export class RoutinesService extends PrismaService{
 
   update(id: number, updateRoutineDto: UpdateRoutineDto) {
     return `This action updates a #${id} routine`;
+  }
+
+  async setRoutineToUser(routineId: number, userId: number) {
+    try {
+      return await this.userRoutine.create({
+        data: {
+          routineId,
+          userId
+        }
+      })
+    }
+    catch(e) {
+      console.log(e)
+    }
   }
 
   remove(id: number) {
