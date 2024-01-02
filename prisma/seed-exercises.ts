@@ -9,6 +9,7 @@ export async function SeedExercises() {
       label: 'Peito'
     }
   })
+  if(!muscleGroup) return
 
   await service.exercise.createMany({
     data: [

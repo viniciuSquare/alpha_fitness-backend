@@ -1,15 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, ValidationPipe, UsePipes } from '@nestjs/common';
+import { ZodValidationPipe } from 'src/pipes/ZodValidationPipe';
+
 import { RoutinesService } from './routines.service';
-import { CreateRoutineDto } from './dto/create-routine.dto';
-import { UpdateRoutineDto } from './dto/update-routine.dto';
-import UserRoutineDto from './dto/user-routine.dto';
+import { Routine } from './entities/routine.entity';
+import { CreateRoutineDto } from './dto/createRoutine.dto';
+import { RoutineToUserDto } from './dto/userRoutine.dto';
+import { UpdateRoutineDto } from './dto/updateRoutine.dto';
 
 @Controller('routines')
 export class RoutinesController {
   constructor(private readonly routinesService: RoutinesService) { }
 
   @Post()
-  create(@Body() createRoutineDto: CreateRoutineDto) {
+  create(@Body(new ZodValidationPipe(Routine.creationSchema)) createRoutineDto: CreateRoutineDto) {
     return this.routinesService.create(createRoutineDto);
   }
 
@@ -19,23 +22,28 @@ export class RoutinesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.routinesService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.routinesService.findOne(id);
+  }
+
+  @Get('/by-user/:id')
+  findByUserId(@Param('id', ParseIntPipe) id: number) {
+    return this.routinesService.findByUserId(id);
   }
 
   @Post('/set-to-user')
-  setRoutineToUser(@Body() userRoutineDto: UserRoutineDto) {
-    console.log(userRoutineDto)
-    return this.routinesService.setRoutineToUser(userRoutineDto.routineId, userRoutineDto.userId);
+  setRoutineToUser(@Body(new ZodValidationPipe(Routine.routineToUserSchema)) routineToUser: RoutineToUserDto) {
+    console.log(routineToUser)
+    return this.routinesService.setRoutineToUser(routineToUser.routineId, routineToUser.userId);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateRoutineDto: UpdateRoutineDto) {
-    return this.routinesService.update(+id, updateRoutineDto);
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateRoutineDto: UpdateRoutineDto) {
+    return this.routinesService.update(id, updateRoutineDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.routinesService.remove(+id);
+  remove(@Param('id') id: number) {
+    return this.routinesService.remove(id);
   }
 }

@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { WorkoutService } from './workout.service';
-import { CreateWorkoutDto } from './dto/create-workout.dto';
-import { UpdateWorkoutDto } from './dto/update-workout.dto';
+import { CreateWorkoutDto } from './dto/createWorkout.dto';
+import { UpdateWorkoutDto } from './dto/updateWorkout.dto';
 
 @Controller('workouts')
 export class WorkoutController {

@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { CreateRoutineDto } from './dto/create-routine.dto';
-import { UpdateRoutineDto } from './dto/update-routine.dto';
 import { PrismaService } from 'src/services/prisma.service';
+import { CreateRoutineDto } from './dto/createRoutine.dto';
+import { UpdateRoutineDto } from './dto/updateRoutine.dto';
 
 @Injectable()
 export class RoutinesService extends PrismaService {
   async create(createRoutineDto: CreateRoutineDto) {
     return await this.routine.create({
-      data: createRoutineDto
+      data: {...createRoutineDto}
     })
   }
 
@@ -23,16 +23,29 @@ export class RoutinesService extends PrismaService {
             userId
           }
         }
+      },
+      include: {
+        RoutineWorkout: true,
+        UserRoutine: true,
       }
     });
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} routine`;
+    return this.routine.findFirst({
+      where: {
+        id
+      }
+    })
   }
 
   update(id: number, updateRoutineDto: UpdateRoutineDto) {
-    return `This action updates a #${id} routine`;
+    return this.routine.update({
+      where: {
+        id
+      },
+      data: updateRoutineDto
+    })
   }
 
   async setRoutineToUser(routineId: number, userId: number) {

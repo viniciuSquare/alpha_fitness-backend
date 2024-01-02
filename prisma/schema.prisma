@@ -68,10 +68,10 @@ model WorkoutExerciseExecution {
   userId     Int
 
   order  Int // WHAT IS THE SEQUENCE TO FOLLOW
-  rest   Int @default(90)
-  volume Int
-  series Int
-  weight Int
+  rest   Int    @default(90)
+  volume String
+  series String
+  weight Float
 
   user     User     @relation(fields: [userId], references: [id])
   workout  Workout  @relation(fields: [workoutId], references: [id])

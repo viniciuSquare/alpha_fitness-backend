@@ -1,15 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { CreateWorkoutDto } from './dto/create-workout.dto';
-import { UpdateWorkoutDto } from './dto/update-workout.dto';
+import { PrismaService } from 'src/services/prisma.service';
+import { UpdateWorkoutDto } from './dto/updateWorkout.dto';
+import { CreateWorkoutDto } from './dto/createWorkout.dto';
 
 @Injectable()
-export class WorkoutService {
+export class WorkoutService extends PrismaService {
   create(createWorkoutDto: CreateWorkoutDto) {
-    return 'This action adds a new workout';
+    return this.workout.create({ 
+      data: createWorkoutDto
+    })
   }
 
   findAll() {
-    return `This action returns all workout`;
+    return this.workout.findMany()
   }
 
   findOne(id: number) {
