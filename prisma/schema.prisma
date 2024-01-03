@@ -85,7 +85,7 @@ model Exercise {
   label         String
   rest          Int?
   sugVolume     String        @map("sug-volume")
-  sugSeries     Int           @default(3) @map("sug-series")
+  sugSeries     String           @default("3") @map("sug-series")
   executionUnit ExecutionUnit
   muscleGroupId Int
 
@@ -106,7 +106,7 @@ model User {
   name        String
   email       String
   dateOfBirth DateTime
-  height      Int
+  height      Float
   imageUrl    String?
 
   WorkoutExerciseExecution WorkoutExerciseExecution[]
