@@ -85,7 +85,7 @@ model Exercise {
   label         String
   rest          Int?
   sugVolume     String        @map("sug-volume")
-  sugSeries     String           @default("3") @map("sug-series")
+  sugSeries     Int           @default(3) @map("sug-series")
   executionUnit ExecutionUnit
   muscleGroupId Int
 
